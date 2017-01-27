@@ -45,6 +45,27 @@
         <div class="row" ng-repeat="(name, value) in players">
           {{ name }}
         </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button id="start_game" ng-class="{'disabled': numPlayers() < 2}" class="btn btn-success btn-block" ng-click="startGame()">Start Game</button>
+          </div>
+        </div>
+      </div>
+
+      <div ng-hide="state != 'GAME'">
+        <div class="row">
+          <div class="col-sm-6">
+            <h2> Player List </h2>
+            <li class="list-group">
+              <ul class="list-group-item" ng-repeat="name in playerOrder">
+                {{ name }} - {{ players[name].alive ? "Alive" : "Dead" }}
+              </ul>
+            </li>
+          </div>
+          <div class="col-sm-6">
+            <h2> Event Log </h2>
+          </div>
+        </div>
       </div>
 
     </div>

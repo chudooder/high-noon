@@ -38,7 +38,7 @@ function makeid(size) {
 
 function genRoom() {
     while(true) {
-        var room = makeid(4);
+        var room = makeid(1);
         if(!rooms[room]) return room;
     }
 }
@@ -103,6 +103,7 @@ io.on('connection', function(socket) {
         // set up the new room
         var roomName = genRoom();
         rooms[roomName] = {
+            state: 'LOBBY',
             players: {}
         };
 
@@ -132,6 +133,11 @@ io.on('connection', function(socket) {
             return;
         }
 
+        if(rooms[roomName].state != 'LOBBY') {
+            socket.emit('not_in_lobby');
+            return;
+        }
+
         // add player to room
         rooms[roomName].players[playerName] = {
             socket: socket
@@ -151,6 +157,14 @@ io.on('connection', function(socket) {
         broadcast(roomName, playerName, 'player_joined', playerName);
 
         debug('%s joined room %s', playerName, roomName);
+    });
+
+    socket.on('start_game', function() {
+        rooms[myRoom].state = 'GAME';
+        broadcast(myRoom, '', 'game_started', {
+            playerOrder: _.shuffle(_.keys(rooms[myRoom].players))
+        });
+        debug('%s started game %s', myName, myRoom);
     });
 });
 
