@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="highNoonApp">
+  <head>
+    <meta charset="UTF-8">
+    <title> High Noon </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  <body ng-controller="LobbyController">
+
+    <h1> High Noon </h1>
+
+    <div style="width: 500px" class="container">
+
+      <div ng-hide="state != 'CONNECT'">
+        <div class="row">
+          <div ng-class="{'has-error': nameError}" class="col-sm-6 col-sm-offset-3 input-group input-group-lg">
+            <input type="text" class="form-control" ng-model="myName" placeholder="Your name"></input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button id="create_room" class="btn btn-success btn-block" ng-click="createRoom()">Create Room</button>
+          </div>
+        </div>
+        <div class="row">
+          <div ng-class="{'has-error': roomError}" class="col-sm-4">
+            <input type="text" class="form-control" ng-model="joinRoomName" placeholder="Room name"></input>
+          </div>
+          <div class="col-sm-8">
+            <button id="join_room" type="button" class="btn btn-block btn-info" ng-click="joinRoom()">Join Room</button>
+          </div>
+        </div>
+        <div ng-if="connectWarning" class="row alert alert-danger">
+          {{ connectWarning }}
+        </div>
+      </div>
+
+      <div ng-hide="state != 'LOBBY'">
+        <div class="row">
+          <h2> Room: {{ roomName }} </h2>
+        </div>
+        <div class="row" ng-repeat="(name, value) in players">
+          {{ name }}
+        </div>
+      </div>
+
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+  </body>
+</html>
